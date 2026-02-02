@@ -14,7 +14,7 @@ from typing import Optional
 import cv2
 import numpy as np
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import HTMLResponse, FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
@@ -102,7 +102,7 @@ async def ask_exercise():
 
 
 @app.post("/api/voice/recognize")
-async def recognize_exercise(request):
+async def recognize_exercise(request: Request):
     """Recognize exercise from voice audio."""
     if not _stt_service or not _stt_service.is_enabled:
         return {"error": "STT not enabled", "exercise": None}
@@ -110,6 +110,8 @@ async def recognize_exercise(request):
     # Get audio data from request
     body = await request.body()
     content_type = request.headers.get("content-type", "audio/webm")
+
+    print(f"STT: Received {len(body)} bytes, content-type: {content_type}")
 
     # Determine format
     if "webm" in content_type:

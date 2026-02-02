@@ -268,24 +268,112 @@ class ReachyCoach:
         except Exception as e:
             print(f"Double nod error: {e}")
 
-    async def react_to_rep(self, rep_count: int, target: int):
-        """React based on rep count with varied animations."""
-        import random
+    async def look_right(self):
+        """Turn head to the right with antenna movement."""
+        if not self.reachy:
+            return
+        try:
+            # Turn right with expressive antenna
+            self.reachy.head.look_at(x=0.5, y=-0.2, z=0.05, duration=0.25)
+            self.reachy.head.left_antenna.goal_position = 20
+            self.reachy.head.right_antenna.goal_position = -15
+            await asyncio.sleep(0.4)
+            # Return to center
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.2)
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+        except Exception as e:
+            print(f"Look right error: {e}")
 
+    async def look_left(self):
+        """Turn head to the left with antenna movement."""
+        if not self.reachy:
+            return
+        try:
+            # Turn left with expressive antenna
+            self.reachy.head.look_at(x=0.5, y=0.2, z=0.05, duration=0.25)
+            self.reachy.head.left_antenna.goal_position = -15
+            self.reachy.head.right_antenna.goal_position = 20
+            await asyncio.sleep(0.4)
+            # Return to center
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.2)
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+        except Exception as e:
+            print(f"Look left error: {e}")
+
+    async def super_excited_antennas(self):
+        """SUPER excited antenna celebration for completing exercise!"""
+        if not self.reachy:
+            return
+        try:
+            # Fast wild antenna wiggle + head bobbing
+            for _ in range(5):
+                # Antennas go crazy
+                self.reachy.head.left_antenna.goal_position = 45
+                self.reachy.head.right_antenna.goal_position = -45
+                self.reachy.head.look_at(x=0.5, y=0.08, z=0.1, duration=0.08)
+                await asyncio.sleep(0.08)
+                self.reachy.head.left_antenna.goal_position = -45
+                self.reachy.head.right_antenna.goal_position = 45
+                self.reachy.head.look_at(x=0.5, y=-0.08, z=0.1, duration=0.08)
+                await asyncio.sleep(0.08)
+
+            # Victory pose - both antennas UP high!
+            self.reachy.head.left_antenna.goal_position = 45
+            self.reachy.head.right_antenna.goal_position = 45
+            self.reachy.head.look_at(x=0.5, y=0, z=0.15, duration=0.3)
+            await asyncio.sleep(0.8)
+
+            # Spin antennas in opposite directions
+            for _ in range(3):
+                self.reachy.head.left_antenna.goal_position = 40
+                self.reachy.head.right_antenna.goal_position = -40
+                await asyncio.sleep(0.12)
+                self.reachy.head.left_antenna.goal_position = -40
+                self.reachy.head.right_antenna.goal_position = 40
+                await asyncio.sleep(0.12)
+
+            # Final triumphant pose
+            self.reachy.head.left_antenna.goal_position = 30
+            self.reachy.head.right_antenna.goal_position = 30
+            self.reachy.head.look_at(x=0.5, y=0, z=0.05, duration=0.3)
+            await asyncio.sleep(0.5)
+
+            # Reset
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.3)
+        except Exception as e:
+            print(f"Super excited error: {e}")
+
+    async def react_to_rep(self, rep_count: int, target: int):
+        """React based on rep count with alternating head movements.
+
+        - Odd reps: look left
+        - Even reps: look right
+        - Target reached: super excited antenna celebration!
+        """
         if rep_count >= target:
+            # TARGET REACHED! Go absolutely crazy with excitement!
+            await self.super_excited_antennas()
             await self.celebration_dance()
         elif rep_count == target - 1:
-            # Last one! Get excited!
+            # Last one! Get excited with alternating look
+            if rep_count % 2 == 0:
+                await self.look_right()
+            else:
+                await self.look_left()
             await self.excited_bounce()
-        elif rep_count == target - 2:
-            await self.wiggle_antennas()
-        elif rep_count % 5 == 0:
-            # Milestone! Big reaction
-            await self.double_nod()
-            await self.wiggle_antennas()
-        elif rep_count % 3 == 0:
-            await self.nod_yes()
         else:
-            # Vary the reaction
-            reaction = random.choice([self.count_rep, self.nod_yes, self.double_nod])
-            await reaction(rep_count) if reaction == self.count_rep else await reaction()
+            # Alternate head direction based on rep count
+            if rep_count % 2 == 0:
+                # Even rep - look right
+                await self.look_right()
+            else:
+                # Odd rep - look left
+                await self.look_left()
+
+            # Add extra flair for milestones
+            if rep_count % 5 == 0:
+                await self.wiggle_antennas()
