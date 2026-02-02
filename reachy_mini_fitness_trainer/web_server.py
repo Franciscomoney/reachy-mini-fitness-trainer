@@ -297,3 +297,7 @@ def start_web_server_standalone(port: int = 5175):
     print(f"    URL: http://localhost:{port}")
 
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+
+if __name__ == "__main__":
+    start_web_server_standalone()

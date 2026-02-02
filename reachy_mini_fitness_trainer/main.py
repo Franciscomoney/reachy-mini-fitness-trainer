@@ -12,8 +12,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from reachy_mini import ReachyMini
-from reachy_mini.reachy_mini import ReachyMiniApp
+from reachy_mini import ReachyMini, ReachyMiniApp
 
 # Import our modules
 from .exercise_tracker import SquatTracker, SquatPhase
