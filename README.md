@@ -137,14 +137,67 @@ reachy-mini-fitness-trainer/
         └── style.css
 ```
 
+## Publishing to Reachy Mini App Store
+
+### Prerequisites
+- HuggingFace account
+- `reachy-mini` SDK installed with app assistant
+
+### Step 1: Validate the App
+```bash
+reachy-mini-app-assistant check
+```
+This checks that the app structure is correct and ready for publishing.
+
+### Step 2: Publish to HuggingFace Space
+```bash
+reachy-mini-app-assistant publish
+```
+You'll be prompted for:
+- Local path to app directory
+- Privacy setting (choose **public** for contest submission)
+
+Your app will be published to:
+```
+https://huggingface.co/spaces/YOUR_USERNAME/reachy-mini-fitness-trainer
+```
+
+### Step 3: Submit to Official App Store (Contest Entry)
+```bash
+reachy-mini-app-assistant publish --official
+```
+This creates a PR on the [official app store dataset](https://huggingface.co/datasets/pollen-robotics/reachy-mini-official-app-store).
+
+**Requirements for official submission:**
+- App must be **public**
+- Include brief description of functionality
+- Subject to Pollen Robotics/HuggingFace team review
+
+### Publishing Checklist
+- [x] `ReachyMiniApp` class with `run()` method
+- [x] `pyproject.toml` with package metadata
+- [x] `README.md` documentation
+- [x] `index.html` for HuggingFace Space landing
+- [x] `custom_app_url` for web UI
+- [x] Code on GitHub
+- [ ] Run `reachy-mini-app-assistant check`
+- [ ] Run `reachy-mini-app-assistant publish`
+- [ ] Run `reachy-mini-app-assistant publish --official`
+
+---
+
 ## Roadmap
 
 - [x] Squat detection and counting
 - [x] Voice coaching (TTS)
 - [x] Reachy robot gestures
 - [x] Animated robot UI
+- [x] Arm raises exercise
+- [x] Jumping jacks exercise
+- [x] Voice-based exercise selection (STT)
+- [x] Sassy motivation & teasing
+- [x] Alternating head movements on reps
 - [ ] Push-ups detection
-- [ ] Lunges tracking
 - [ ] Workout history
 - [ ] Multiple exercise circuits
 
