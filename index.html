@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reachy Mini Fitness Trainer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="landing">
+        <header class="hero">
+            <div class="hero-badge">Reachy Mini App</div>
+            <h1 class="hero-title">Fitness Trainer</h1>
+            <p class="hero-tagline">AI-Powered Workout Companion with Voice Coaching</p>
+        </header>
+
+        <main class="content">
+            <section class="demo-section">
+                <div class="demo-card">
+                    <div class="demo-visual">
+                        <div class="robot-preview">
+                            <svg viewBox="0 0 200 180" fill="none">
+                                <rect width="200" height="180" rx="20" fill="#3DDE99"/>
+                                <g class="antenna-left">
+                                    <line x1="60" y1="50" x2="40" y2="15" stroke="white" stroke-width="3"/>
+                                    <circle cx="40" cy="13" r="5" fill="white"/>
+                                </g>
+                                <g class="antenna-right">
+                                    <line x1="140" y1="50" x2="160" y2="15" stroke="white" stroke-width="3"/>
+                                    <circle cx="160" cy="13" r="5" fill="white"/>
+                                </g>
+                                <rect x="45" y="40" width="110" height="70" rx="18" fill="white"/>
+                                <ellipse cx="72" cy="75" rx="15" ry="17" fill="#3DDE99"/>
+                                <ellipse cx="128" cy="75" rx="15" ry="17" fill="#3DDE99"/>
+                                <ellipse cx="72" cy="75" rx="6" ry="8" fill="#1a1a1a"/>
+                                <ellipse cx="128" cy="75" rx="6" ry="8" fill="#1a1a1a"/>
+                                <path d="M65,120 Q55,140 60,165 Q100,175 140,165 Q145,140 135,120 Z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="demo-stats">
+                            <div class="stat">
+                                <span class="stat-value">10</span>
+                                <span class="stat-label">Target Reps</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">🎙️</span>
+                                <span class="stat-label">Voice Coach</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">🤖</span>
+                                <span class="stat-label">Robot Buddy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features-section">
+                <h2>Features</h2>
+                <div class="features-grid">
+                    <div class="feature">
+                        <span class="feature-icon">📷</span>
+                        <h3>Pose Detection</h3>
+                        <p>MediaPipe tracks your squats automatically - no sensors needed</p>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🎙️</span>
+                        <h3>Voice Coaching</h3>
+                        <p>Counts your reps out loud with encouragement</p>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🤖</span>
+                        <h3>Robot Gestures</h3>
+                        <p>Reachy nods, wiggles, and celebrates with you</p>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🎯</span>
+                        <h3>Goal Tracking</h3>
+                        <p>Set targets and track progress in real-time</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="install-section">
+                <h2>Quick Start</h2>
+                <div class="install-steps">
+                    <div class="step">
+                        <span class="step-num">1</span>
+                        <code>pip install reachy-mini-fitness-trainer</code>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">2</span>
+                        <code>reachy-mini-daemon --sim</code>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">3</span>
+                        <span>Select "Fitness Trainer" from dashboard</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tts-section">
+                <h2>Voice Coaching Providers</h2>
+                <div class="tts-options">
+                    <div class="tts-option">
+                        <span class="tts-name">Inworld TTS</span>
+                        <span class="tts-badge default">Default</span>
+                        <p>Fast, expressive voices with <100ms latency</p>
+                    </div>
+                    <div class="tts-option">
+                        <span class="tts-name">OVH NVIDIA Riva</span>
+                        <span class="tts-badge">Alternative</span>
+                        <p>High-quality NVIDIA TTS via OVH AI Endpoints</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Built for the <strong>Reachy Mini App Contest 2025</strong></p>
+            <div class="footer-links">
+                <a href="https://github.com/Franciscomoney/reachy-mini-fitness-trainer">GitHub</a>
+                <span>•</span>
+                <a href="https://www.pollen-robotics.com/reachy-mini/">Reachy Mini</a>
+                <span>•</span>
+                <a href="https://inworld.ai/tts">Inworld TTS</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

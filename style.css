@@ -1,0 +1,348 @@
+/* Reachy Mini Fitness Trainer - HuggingFace Landing Page */
+
+:root {
+    --accent: #3DDE99;
+    --accent-dark: #2cb87a;
+    --bg: #0a0a0a;
+    --card: #1a1a1a;
+    --card-border: #2a2a2a;
+    --text: #ffffff;
+    --text-dim: #888888;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.landing {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 60px 0 40px;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+}
+
+.hero-tagline {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Demo Section */
+.demo-section {
+    margin-bottom: 48px;
+}
+
+.demo-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.demo-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+    flex-wrap: wrap;
+}
+
+.robot-preview {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.robot-preview svg {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+}
+
+/* Antenna animation */
+.antenna-left {
+    animation: antennaLeft 2s ease-in-out infinite;
+    transform-origin: 60px 50px;
+}
+
+.antenna-right {
+    animation: antennaRight 2s ease-in-out infinite;
+    transform-origin: 140px 50px;
+}
+
+@keyframes antennaLeft {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-8deg); }
+}
+
+@keyframes antennaRight {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(8deg); }
+}
+
+.demo-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Features Section */
+.features-section {
+    margin-bottom: 48px;
+}
+
+.features-section h2,
+.install-section h2,
+.tts-section h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.feature {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.feature:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+}
+
+.feature-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.feature h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.feature p {
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+/* Install Section */
+.install-section {
+    margin-bottom: 48px;
+}
+
+.install-steps {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.step:last-child {
+    border-bottom: none;
+}
+
+.step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step code {
+    background: rgba(61, 222, 153, 0.1);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 13px;
+}
+
+/* TTS Section */
+.tts-section {
+    margin-bottom: 48px;
+}
+
+.tts-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.tts-option {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.tts-name {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.tts-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.tts-badge.default {
+    background: var(--accent);
+    color: #000;
+}
+
+.tts-option p {
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--card-border);
+    margin-top: 20px;
+}
+
+.footer p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+.footer-links a:hover {
+    opacity: 0.8;
+}
+
+.footer-links span {
+    color: var(--card-border);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .demo-visual {
+        padding: 24px;
+        gap: 24px;
+    }
+
+    .robot-preview {
+        width: 160px;
+    }
+
+    .demo-stats {
+        gap: 24px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reachy Mini Fitness Trainer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Reachy Mini Fitness Trainer</h1>
+            <p class="subtitle">AI-Powered Squat Counter with Voice Coaching</p>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="main-layout">
+            <!-- Left: Video Feed -->
+            <section class="video-section">
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display:none;"></canvas>
+
+                    <div class="video-overlay" id="overlay">
+                        <span>Click "Start Workout" to begin<br><br>
+                        <small>Camera will detect your squats automatically</small></span>
+                    </div>
+
+                    <div class="body-status" id="bodyStatus" style="display:none;">
+                        <span id="bodyStatusText">Checking pose...</span>
+                    </div>
+
+                    <!-- Rep counter overlay -->
+                    <div class="rep-overlay" id="repOverlay" style="display:none;">
+                        <div class="rep-count" id="repCount">0</div>
+                        <div class="rep-label">REPS</div>
+                    </div>
+
+                    <!-- Angle display -->
+                    <div class="angle-overlay" id="angleOverlay" style="display:none;">
+                        <div class="angle-label">Knee</div>
+                        <div class="angle-value" id="angleValue">180°</div>
+                    </div>
+                </div>
+
+                <div class="feedback-bar" id="feedback">
+                    Ready to start your workout!
+                </div>
+            </section>
+
+            <!-- Right: Robot + Stats -->
+            <aside class="sidebar">
+                <!-- Reachy Robot Visualization -->
+                <div class="robot-card">
+                    <h3>Your Coach</h3>
+                    <div class="robot-stage" id="robotStage">
+                        <svg class="robot-svg" viewBox="0 0 200 220" id="reachySvg">
+                            <!-- Background -->
+                            <rect width="200" height="220" rx="20" fill="#3DDE99"/>
+
+                            <!-- Left Antenna -->
+                            <g id="leftAntenna" class="antenna">
+                                <line x1="60" y1="60" x2="40" y2="20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="40" cy="18" r="6" fill="white"/>
+                            </g>
+
+                            <!-- Right Antenna -->
+                            <g id="rightAntenna" class="antenna">
+                                <line x1="140" y1="60" x2="160" y2="20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="160" cy="18" r="6" fill="white"/>
+                            </g>
+
+                            <!-- Head -->
+                            <g id="robotHead">
+                                <rect x="40" y="50" width="120" height="80" rx="20" fill="white"/>
+
+                                <!-- Left Eye -->
+                                <g id="leftEye">
+                                    <ellipse cx="70" cy="90" rx="18" ry="20" fill="#3DDE99"/>
+                                    <ellipse cx="70" cy="90" rx="8" ry="10" fill="#1a1a1a" class="pupil"/>
+                                </g>
+
+                                <!-- Right Eye -->
+                                <g id="rightEye">
+                                    <ellipse cx="130" cy="90" rx="18" ry="20" fill="#3DDE99"/>
+                                    <ellipse cx="130" cy="90" rx="8" ry="10" fill="#1a1a1a" class="pupil"/>
+                                </g>
+                            </g>
+
+                            <!-- Body -->
+                            <path id="robotBody" d="M60,140 Q50,160 55,200 Q100,215 145,200 Q150,160 140,140 Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="robot-mood" id="robotMood">
+                        <span class="mood-emoji" id="moodEmoji">😊</span>
+                        <span class="mood-text" id="moodText">Ready to coach!</span>
+                    </div>
+                </div>
+
+                <!-- Progress Card -->
+                <div class="stat-card">
+                    <h3>Progress</h3>
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="140" height="140">
+                            <circle class="progress-bg" cx="70" cy="70" r="60"/>
+                            <circle class="progress-fill" id="progressRing" cx="70" cy="70" r="60"
+                                stroke-dasharray="377" stroke-dashoffset="377"/>
+                        </svg>
+                        <div class="progress-text">
+                            <div class="progress-count" id="progressCount">0</div>
+                            <div class="progress-target">of <span id="targetReps">10</span></div>
+                        </div>
+                    </div>
+                    <div class="phase-indicator">
+                        <div class="phase" id="phaseStanding">STAND</div>
+                        <div class="phase" id="phaseDown">DOWN</div>
+                        <div class="phase" id="phaseUp">UP</div>
+                    </div>
+                </div>
+
+                <!-- Status Card -->
+                <div class="stat-card">
+                    <h3>Session</h3>
+                    <div class="status-row">
+                        <span class="status-label">Reachy</span>
+                        <span class="status-value">
+                            <span class="status-dot" id="reachyDot"></span>
+                            <span id="reachyStatus">Checking...</span>
+                        </span>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-label">Voice</span>
+                        <span class="status-value">
+                            <span class="status-dot" id="ttsDot"></span>
+                            <span id="ttsStatus">Checking...</span>
+                        </span>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-label">Duration</span>
+                        <span class="status-value" id="duration">0:00</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-card">
+                    <button class="btn btn-start" id="startBtn">Start Workout</button>
+                    <button class="btn btn-stop" id="stopBtn" disabled>Stop</button>
+                </div>
+            </aside>
+        </main>
+
+        <footer class="footer">
+            <p>Built for the Reachy Mini App Contest 2025</p>
+        </footer>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
