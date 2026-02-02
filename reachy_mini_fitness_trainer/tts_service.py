@@ -329,6 +329,14 @@ class FitnessCoachTTS:
         "ready": "Ready when you are champ! Let's make some magic happen!",
         "finished": "Workout complete! You're officially a certified badass!",
         "finished_target": "TARGET DESTROYED! You're unstoppable! I'm so proud of you!",
+
+        # Voice selection
+        "ask_exercise": "Hey champion! What exercise are we crushing today? Say SQUATS, ARM RAISES, or JUMPING JACKS!",
+        "didnt_hear": "Hmm, I didn't quite catch that. Say SQUATS, ARM RAISES, or JUMPING JACKS!",
+        "confirm_squats": "SQUATS! Great choice! Let's destroy those legs!",
+        "confirm_arm_raises": "ARM RAISES! Time to reach for the sky! Let's go!",
+        "confirm_jumping_jacks": "JUMPING JACKS! Cardio time baby! Let's get that heart pumping!",
+        "listening": "I'm listening...",
     }
 
     def __init__(self, config: Optional[TTSConfig] = None):
@@ -458,6 +466,24 @@ class FitnessCoachTTS:
         }
         message = messages.get(exercise, messages["squats"])
         return await self.synthesize(message)
+
+    async def get_ask_exercise(self) -> bytes:
+        """Get the 'ask for exercise' prompt."""
+        return await self.get_phrase("ask_exercise")
+
+    async def get_exercise_confirmation(self, exercise: str) -> bytes:
+        """Get confirmation message for selected exercise."""
+        confirmations = {
+            "squats": "confirm_squats",
+            "arm_raises": "confirm_arm_raises",
+            "jumping_jacks": "confirm_jumping_jacks"
+        }
+        phrase_key = confirmations.get(exercise, "confirm_squats")
+        return await self.get_phrase(phrase_key)
+
+    async def get_didnt_hear(self) -> bytes:
+        """Get 'didn't hear you' message."""
+        return await self.get_phrase("didnt_hear")
 
     async def get_finish_message(self, rep_count: int, duration: float, target_reached: bool) -> bytes:
         """Get personalized finish message."""

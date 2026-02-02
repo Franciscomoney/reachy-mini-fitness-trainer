@@ -26,6 +26,15 @@
                         <div class="exercise-selection" id="exerciseSelection">
                             <h2>Choose Your Exercise!</h2>
                             <p class="selection-intro">Hey champion! What are we crushing today?</p>
+
+                            <!-- Voice Selection Button -->
+                            <button class="voice-select-btn" id="voiceSelectBtn">
+                                <span class="voice-icon">🎤</span>
+                                <span>Use Voice Command</span>
+                            </button>
+
+                            <div class="or-divider"><span>or tap to select</span></div>
+
                             <div class="exercise-options">
                                 <button class="exercise-btn" data-exercise="squats" id="btnSquats">
                                     <span class="exercise-icon">🦵</span>
@@ -42,6 +51,15 @@
                                     <span class="exercise-name">Jumping Jacks</span>
                                     <span class="exercise-desc">Jump and spread those arms wide!</span>
                                 </button>
+                            </div>
+
+                            <!-- Voice listening state -->
+                            <div class="voice-listening" id="voiceListening" style="display: none;">
+                                <div class="listening-animation">
+                                    <span class="pulse-ring"></span>
+                                    <span class="mic-icon">🎤</span>
+                                </div>
+                                <p class="listening-text" id="listeningText">Listening... Say your exercise!</p>
                             </div>
                         </div>
                     </div>

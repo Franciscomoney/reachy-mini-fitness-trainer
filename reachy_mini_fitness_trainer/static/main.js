@@ -27,6 +27,11 @@ const elements = {};
 let audioQueue = [];
 let isPlayingAudio = false;
 
+// Voice recording
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     initElements();
@@ -76,6 +81,12 @@ function attachEventListeners() {
     document.querySelectorAll('.exercise-btn').forEach(btn => {
         btn.onclick = () => selectExercise(btn.dataset.exercise);
     });
+
+    // Voice selection button
+    const voiceBtn = document.getElementById('voiceSelectBtn');
+    if (voiceBtn) {
+        voiceBtn.onclick = startVoiceSelection;
+    }
 }
 
 function selectExercise(exercise) {
@@ -412,4 +423,135 @@ function queueAudio(data, format) {
         audioQueue.push({ data, format });
         processAudioQueue();
     }
+}
+
+// Voice Selection Functions
+async function startVoiceSelection() {
+    const voiceBtn = document.getElementById('voiceSelectBtn');
+    const exerciseOptions = document.querySelector('.exercise-options');
+    const voiceListening = document.getElementById('voiceListening');
+    const listeningText = document.getElementById('listeningText');
+    const orDivider = document.querySelector('.or-divider');
+
+    try {
+        // First, play TTS asking for exercise
+        listeningText.textContent = 'Reachy is asking...';
+        voiceBtn.style.display = 'none';
+        exerciseOptions.style.display = 'none';
+        orDivider.style.display = 'none';
+        voiceListening.style.display = 'block';
+
+        // Play "ask exercise" audio
+        await playAudioFromUrl('/api/voice/ask-exercise');
+
+        // Now start recording
+        listeningText.textContent = 'Listening... Say SQUATS, ARM RAISES, or JUMPING JACKS!';
+        await startRecording();
+
+        // Record for 4 seconds
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        // Stop and process
+        listeningText.textContent = 'Processing...';
+        const audioBlob = await stopRecording();
+
+        // Send to API
+        const response = await fetch('/api/voice/recognize', {
+            method: 'POST',
+            headers: { 'Content-Type': 'audio/webm' },
+            body: audioBlob
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.exercise) {
+            // Play confirmation
+            listeningText.textContent = `Got it! ${EXERCISES[result.exercise]?.name || result.exercise}!`;
+            await playAudioFromUrl(`/api/voice/confirm/${result.exercise}`);
+
+            // Start the workout
+            selectedExercise = result.exercise;
+            voiceListening.style.display = 'none';
+            startWorkout();
+        } else {
+            // Didn't understand
+            listeningText.textContent = "Didn't catch that...";
+            await playAudioFromUrl('/api/voice/didnt-hear');
+
+            // Show options again
+            setTimeout(() => {
+                voiceListening.style.display = 'none';
+                voiceBtn.style.display = 'flex';
+                exerciseOptions.style.display = 'flex';
+                orDivider.style.display = 'flex';
+            }, 1500);
+        }
+
+    } catch (e) {
+        console.error('Voice selection error:', e);
+        // Fall back to manual selection
+        voiceListening.style.display = 'none';
+        voiceBtn.style.display = 'flex';
+        exerciseOptions.style.display = 'flex';
+        orDivider.style.display = 'flex';
+        alert('Microphone access needed for voice commands. Please use the buttons instead.');
+    }
+}
+
+async function startRecording() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+            audioChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.start(100); // Collect data every 100ms
+    isRecording = true;
+}
+
+async function stopRecording() {
+    return new Promise((resolve) => {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            resolve(new Blob(audioChunks, { type: 'audio/webm' }));
+            return;
+        }
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            // Stop all tracks
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            isRecording = false;
+            resolve(blob);
+        };
+
+        mediaRecorder.stop();
+    });
+}
+
+async function playAudioFromUrl(url) {
+    return new Promise((resolve, reject) => {
+        fetch(url)
+            .then(res => {
+                if (!res.ok) throw new Error('Audio fetch failed');
+                return res.blob();
+            })
+            .then(blob => {
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                audio.onended = () => {
+                    URL.revokeObjectURL(audioUrl);
+                    resolve();
+                };
+                audio.onerror = (e) => {
+                    URL.revokeObjectURL(audioUrl);
+                    reject(e);
+                };
+                audio.play().catch(reject);
+            })
+            .catch(reject);
+    });
 }

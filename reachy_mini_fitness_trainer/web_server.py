@@ -24,12 +24,14 @@ from .pose_detector import PoseDetector
 from .exercise_tracker import ExerciseTracker, ExerciseType
 from .tts_service import FitnessCoachTTS, TTSConfig
 from .reachy_coach import ReachyCoach
+from .stt_service import STTService
 
 
 # Global references (set by start_web_server)
 _reachy_mini: Optional[ReachyMini] = None
 _squat_tracker: Optional[ExerciseTracker] = None
 _tts_service: Optional[FitnessCoachTTS] = None
+_stt_service: Optional[STTService] = None
 _reachy_coach: Optional[ReachyCoach] = None
 _pose_detector: Optional[PoseDetector] = None
 _stop_event: Optional[threading.Event] = None
@@ -81,7 +83,78 @@ async def get_status():
         "reachy_connected": _reachy_mini is not None,
         "tts_enabled": _tts_service.is_enabled if _tts_service else False,
         "tts_provider": _tts_service.provider_name if _tts_service else None,
+        "stt_enabled": _stt_service.is_enabled if _stt_service else False,
     }
+
+
+@app.get("/api/voice/ask-exercise")
+async def ask_exercise():
+    """Get TTS audio asking user to choose an exercise."""
+    if not _tts_service or not _tts_service.is_enabled:
+        return {"error": "TTS not enabled"}
+
+    audio = await _tts_service.get_ask_exercise()
+    if not audio:
+        return {"error": "TTS synthesis failed"}
+
+    content_type = "audio/mpeg" if _tts_service.audio_format == "mp3" else "audio/wav"
+    return Response(content=audio, media_type=content_type)
+
+
+@app.post("/api/voice/recognize")
+async def recognize_exercise(request):
+    """Recognize exercise from voice audio."""
+    if not _stt_service or not _stt_service.is_enabled:
+        return {"error": "STT not enabled", "exercise": None}
+
+    # Get audio data from request
+    body = await request.body()
+    content_type = request.headers.get("content-type", "audio/webm")
+
+    # Determine format
+    if "webm" in content_type:
+        format = "webm"
+    elif "wav" in content_type:
+        format = "wav"
+    elif "ogg" in content_type:
+        format = "ogg"
+    else:
+        format = "webm"
+
+    exercise = await _stt_service.recognize_exercise(body, format)
+
+    if exercise:
+        return {"exercise": exercise, "success": True}
+    else:
+        return {"exercise": None, "success": False}
+
+
+@app.get("/api/voice/confirm/{exercise}")
+async def confirm_exercise(exercise: str):
+    """Get TTS audio confirming the selected exercise."""
+    if not _tts_service or not _tts_service.is_enabled:
+        return {"error": "TTS not enabled"}
+
+    audio = await _tts_service.get_exercise_confirmation(exercise)
+    if not audio:
+        return {"error": "TTS synthesis failed"}
+
+    content_type = "audio/mpeg" if _tts_service.audio_format == "mp3" else "audio/wav"
+    return Response(content=audio, media_type=content_type)
+
+
+@app.get("/api/voice/didnt-hear")
+async def didnt_hear():
+    """Get TTS audio for when voice wasn't recognized."""
+    if not _tts_service or not _tts_service.is_enabled:
+        return {"error": "TTS not enabled"}
+
+    audio = await _tts_service.get_didnt_hear()
+    if not audio:
+        return {"error": "TTS synthesis failed"}
+
+    content_type = "audio/mpeg" if _tts_service.audio_format == "mp3" else "audio/wav"
+    return Response(content=audio, media_type=content_type)
 
 
 @app.get("/api/tts/test")
@@ -347,7 +420,7 @@ def start_web_server(
 
 def start_web_server_standalone(port: int = 5175):
     """Start web server without Reachy (for testing)."""
-    global _squat_tracker, _tts_service, _pose_detector
+    global _squat_tracker, _tts_service, _stt_service, _pose_detector
 
     print("Starting in standalone mode (no Reachy robot)")
 
@@ -357,9 +430,11 @@ def start_web_server_standalone(port: int = 5175):
 
     tts_config = TTSConfig.from_env()
     _tts_service = FitnessCoachTTS(tts_config)
+    _stt_service = STTService()
 
     print(f"    Target Reps: {target_reps}")
     print(f"    TTS: {'✓ ' + _tts_service.provider_name if _tts_service.is_enabled else '✗ Disabled'}")
+    print(f"    STT: {'✓ OVH Whisper' if _stt_service.is_enabled else '✗ Disabled'}")
     print(f"    URL: http://localhost:{port}")
 
     uvicorn.run(app, host="0.0.0.0", port=port)
