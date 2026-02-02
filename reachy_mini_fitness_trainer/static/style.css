@@ -108,6 +108,78 @@ body {
     display: none;
 }
 
+/* Exercise Selection */
+.exercise-selection {
+    text-align: center;
+    padding: 20px;
+}
+
+.exercise-selection h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.selection-intro {
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.exercise-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.exercise-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: rgba(61, 222, 153, 0.1);
+    border: 2px solid rgba(61, 222, 153, 0.3);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.exercise-btn:hover {
+    background: rgba(61, 222, 153, 0.2);
+    border-color: var(--accent);
+    transform: translateX(4px);
+}
+
+.exercise-btn:active {
+    transform: scale(0.98);
+}
+
+.exercise-icon {
+    font-size: 32px;
+    width: 48px;
+    text-align: center;
+}
+
+.exercise-name {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.exercise-desc {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+}
+
 .body-status {
     position: absolute;
     bottom: 70px;
@@ -287,6 +359,58 @@ body {
 @keyframes eyeLook {
     0%, 100% { transform: translateX(0); }
     50% { transform: translateX(3px); }
+}
+
+/* Excited state - bouncy! */
+.robot-stage.excited #robotHead {
+    animation: headBounce 0.3s ease infinite;
+}
+
+.robot-stage.excited #leftAntenna,
+.robot-stage.excited #rightAntenna {
+    animation: antennaExcited 0.15s ease infinite alternate;
+}
+
+@keyframes headBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.05); }
+}
+
+@keyframes antennaExcited {
+    from { transform: rotate(-20deg); }
+    to { transform: rotate(20deg); }
+}
+
+/* Impatient state - annoyed wiggle */
+.robot-stage.impatient #robotHead {
+    animation: headImpatient 0.5s ease infinite;
+}
+
+.robot-stage.impatient #leftAntenna,
+.robot-stage.impatient #rightAntenna {
+    animation: antennaDroop 1s ease infinite;
+}
+
+.robot-stage.impatient .pupil {
+    animation: eyeRoll 2s ease infinite;
+}
+
+@keyframes headImpatient {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+@keyframes antennaDroop {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(-25deg); }
+}
+
+@keyframes eyeRoll {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(4px) translateY(-2px); }
+    50% { transform: translateX(-4px) translateY(-2px); }
+    75% { transform: translateX(0) translateY(2px); }
 }
 
 /* Blink animation */

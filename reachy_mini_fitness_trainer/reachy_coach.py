@@ -194,13 +194,98 @@ class ReachyCoach:
         except Exception as e:
             print(f"Watching pose error: {e}")
 
+    async def impatient_wiggle(self):
+        """Impatient/annoyed wiggle when user is slacking."""
+        if not self.reachy:
+            return
+        try:
+            # Quick side-to-side head shake with antenna droop
+            for _ in range(2):
+                self.reachy.head.look_at(x=0.5, y=0.12, z=-0.05, duration=0.15)
+                self.reachy.head.left_antenna.goal_position = -20
+                self.reachy.head.right_antenna.goal_position = -20
+                await asyncio.sleep(0.15)
+                self.reachy.head.look_at(x=0.5, y=-0.12, z=-0.05, duration=0.15)
+                await asyncio.sleep(0.15)
+            # End with a "hmph" pose
+            self.reachy.head.look_at(x=0.5, y=0, z=-0.08, duration=0.2)
+            self.reachy.head.left_antenna.goal_position = -10
+            self.reachy.head.right_antenna.goal_position = -10
+            await asyncio.sleep(0.5)
+            # Reset
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.3)
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+        except Exception as e:
+            print(f"Impatient wiggle error: {e}")
+
+    async def excited_bounce(self):
+        """Excited bouncing motion for big achievements."""
+        if not self.reachy:
+            return
+        try:
+            for _ in range(4):
+                self.reachy.head.look_at(x=0.5, y=0, z=0.12, duration=0.1)
+                self.reachy.head.left_antenna.goal_position = 40
+                self.reachy.head.right_antenna.goal_position = 40
+                await asyncio.sleep(0.1)
+                self.reachy.head.look_at(x=0.5, y=0, z=-0.02, duration=0.1)
+                self.reachy.head.left_antenna.goal_position = -10
+                self.reachy.head.right_antenna.goal_position = -10
+                await asyncio.sleep(0.1)
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.2)
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+        except Exception as e:
+            print(f"Excited bounce error: {e}")
+
+    async def head_tilt_curious(self):
+        """Curious head tilt."""
+        if not self.reachy:
+            return
+        try:
+            self.reachy.head.look_at(x=0.5, y=0.1, z=0.05, duration=0.3)
+            self.reachy.head.left_antenna.goal_position = 25
+            self.reachy.head.right_antenna.goal_position = 5
+            await asyncio.sleep(0.8)
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.3)
+            self.reachy.head.left_antenna.goal_position = 0
+            self.reachy.head.right_antenna.goal_position = 0
+        except Exception as e:
+            print(f"Head tilt error: {e}")
+
+    async def double_nod(self):
+        """Enthusiastic double nod."""
+        if not self.reachy:
+            return
+        try:
+            for _ in range(2):
+                self.reachy.head.look_at(x=0.5, y=0, z=0.1, duration=0.12)
+                await asyncio.sleep(0.12)
+                self.reachy.head.look_at(x=0.5, y=0, z=-0.05, duration=0.12)
+                await asyncio.sleep(0.12)
+            self.reachy.head.look_at(x=0.5, y=0, z=0, duration=0.15)
+        except Exception as e:
+            print(f"Double nod error: {e}")
+
     async def react_to_rep(self, rep_count: int, target: int):
-        """React based on rep count."""
+        """React based on rep count with varied animations."""
+        import random
+
         if rep_count >= target:
             await self.celebration_dance()
         elif rep_count == target - 1:
+            # Last one! Get excited!
+            await self.excited_bounce()
+        elif rep_count == target - 2:
             await self.wiggle_antennas()
         elif rep_count % 5 == 0:
+            # Milestone! Big reaction
+            await self.double_nod()
+            await self.wiggle_antennas()
+        elif rep_count % 3 == 0:
             await self.nod_yes()
         else:
-            await self.count_rep(rep_count)
+            # Vary the reaction
+            reaction = random.choice([self.count_rep, self.nod_yes, self.double_nod])
+            await reaction(rep_count) if reaction == self.count_rep else await reaction()

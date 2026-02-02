@@ -9,6 +9,16 @@ let frameInterval = null;
 let durationInterval = null;
 let startTime = null;
 let lastRepCount = 0;
+let lastRepTime = Date.now();
+let isIdle = false;
+let idleCheckInterval = null;
+let selectedExercise = 'squats';
+
+const EXERCISES = {
+    squats: { name: 'Squats', icon: '🦵', desc: 'Bend those knees!' },
+    arm_raises: { name: 'Arm Raises', icon: '🙌', desc: 'Reach for the sky!' },
+    jumping_jacks: { name: 'Jumping Jacks', icon: '⭐', desc: 'Jump and spread!' }
+};
 
 // DOM Elements
 const elements = {};
@@ -61,6 +71,18 @@ function initElements() {
 function attachEventListeners() {
     elements.startBtn.onclick = startWorkout;
     elements.stopBtn.onclick = stopWorkout;
+
+    // Exercise selection buttons
+    document.querySelectorAll('.exercise-btn').forEach(btn => {
+        btn.onclick = () => selectExercise(btn.dataset.exercise);
+    });
+}
+
+function selectExercise(exercise) {
+    selectedExercise = exercise;
+    const ex = EXERCISES[exercise];
+    elements.feedback.textContent = `Let's do ${ex.name}! ${ex.desc}`;
+    startWorkout();
 }
 
 async function checkStatus() {
@@ -108,7 +130,7 @@ async function startWorkout() {
         ws = new WebSocket(`${protocol}//${window.location.host}/ws/workout`);
 
         ws.onopen = () => {
-            ws.send(JSON.stringify({ type: 'start' }));
+            ws.send(JSON.stringify({ type: 'start', exercise: selectedExercise }));
             isRunning = true;
             elements.stopBtn.disabled = false;
             startTime = Date.now();
@@ -190,7 +212,17 @@ function handleMessage(data) {
 
             elements.repCount.textContent = data.rep_count || 0;
             elements.progressCount.textContent = data.rep_count || 0;
-            elements.angleValue.textContent = (data.knee_angle || 180) + '°';
+
+            // Show appropriate angle based on exercise
+            const angle = data.angle || (selectedExercise === 'squats' ? data.knee_angle : data.shoulder_angle) || 0;
+            elements.angleValue.textContent = Math.round(angle) + '°';
+
+            // Update angle label
+            const angleLabel = document.querySelector('.angle-label');
+            if (angleLabel) {
+                angleLabel.textContent = selectedExercise === 'squats' ? 'Knee' : 'Arm';
+            }
+
             elements.feedback.textContent = data.feedback || 'Keep going!';
 
             // Update progress ring
@@ -215,7 +247,9 @@ function handleMessage(data) {
         }
     } else if (data.type === 'started') {
         elements.targetReps.textContent = data.target_reps;
-        elements.feedback.textContent = `Let's do ${data.target_reps} squats!`;
+        const exerciseName = data.exercise_name || EXERCISES[selectedExercise]?.name || 'exercise';
+        elements.feedback.textContent = `Let's do ${data.target_reps} ${exerciseName}!`;
+        lastRepTime = Date.now();
         resetRobotMood();
         setRobotState('watching');
     } else if (data.type === 'stopped') {
@@ -246,36 +280,79 @@ function updateRobotMood(repCount, targetReps, isComplete) {
     // Nod on new rep
     if (repCount > lastRepCount) {
         lastRepCount = repCount;
-        setRobotState('nodding');
-        setTimeout(() => setRobotState('watching'), 400);
+        lastRepTime = Date.now();
+        isIdle = false;
+
+        // Different animations based on rep
+        if (repCount >= targetReps) {
+            setRobotState('celebrating');
+        } else if (repCount === targetReps - 1) {
+            setRobotState('excited');
+            setTimeout(() => setRobotState('watching'), 800);
+        } else if (repCount % 5 === 0) {
+            setRobotState('celebrating');
+            setTimeout(() => setRobotState('watching'), 600);
+        } else {
+            setRobotState('nodding');
+            setTimeout(() => setRobotState('watching'), 400);
+        }
     }
 
     const progress = (repCount / targetReps) * 100;
     let emoji, text;
 
-    if (isComplete || repCount >= targetReps) {
+    // Check if idle (more than 8 seconds since last rep)
+    const timeSinceRep = (Date.now() - lastRepTime) / 1000;
+    if (timeSinceRep > 8 && repCount > 0 && repCount < targetReps) {
+        if (!isIdle) {
+            isIdle = true;
+            setRobotState('impatient');
+        }
+        emoji = '😤';
+        text = getIdleText(timeSinceRep);
+    } else if (isComplete || repCount >= targetReps) {
         emoji = '🎉';
-        text = 'Amazing workout!';
+        text = 'YOU DID IT! LEGEND!';
         setRobotState('celebrating');
-    } else if (progress >= 75) {
+    } else if (progress >= 90) {
         emoji = '🔥';
-        text = 'Almost there!';
-    } else if (progress >= 50) {
+        text = 'ONE MORE! COME ON!';
+    } else if (progress >= 75) {
         emoji = '💪';
-        text = 'Halfway! Keep going!';
+        text = 'SO CLOSE! PUSH IT!';
+    } else if (progress >= 50) {
+        emoji = '⚡';
+        text = 'HALFWAY! UNSTOPPABLE!';
     } else if (progress >= 25) {
-        emoji = '👍';
-        text = 'Great form!';
+        emoji = '👊';
+        text = 'GREAT FORM! KEEP IT UP!';
     } else if (repCount > 0) {
-        emoji = '😊';
-        text = 'Nice start!';
+        emoji = '😎';
+        text = 'NICE START! LETS GO!';
     } else {
         emoji = '👀';
-        text = 'Watching you...';
+        text = 'Show me what you got!';
     }
 
     elements.moodEmoji.textContent = emoji;
     elements.moodText.textContent = text;
+}
+
+function getIdleText(seconds) {
+    const texts = [
+        "Hello? Anyone there?",
+        "Did you fall asleep?",
+        "I'm getting bored...",
+        "Come on, move it!",
+        "Waiting on you...",
+        "My grandma moves faster!",
+        "Are we doing this or not?",
+        "Earth to human!",
+        "Wake up buttercup!",
+        "I believe in you... maybe"
+    ];
+    const index = Math.floor(seconds / 5) % texts.length;
+    return texts[index];
 }
 
 function resetRobotMood() {

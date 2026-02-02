@@ -23,8 +23,27 @@
                     <canvas id="canvas" style="display:none;"></canvas>
 
                     <div class="video-overlay" id="overlay">
-                        <span>Click "Start Workout" to begin<br><br>
-                        <small>Camera will detect your squats automatically</small></span>
+                        <div class="exercise-selection" id="exerciseSelection">
+                            <h2>Choose Your Exercise!</h2>
+                            <p class="selection-intro">Hey champion! What are we crushing today?</p>
+                            <div class="exercise-options">
+                                <button class="exercise-btn" data-exercise="squats" id="btnSquats">
+                                    <span class="exercise-icon">🦵</span>
+                                    <span class="exercise-name">Squats</span>
+                                    <span class="exercise-desc">Bend those knees, feel the burn!</span>
+                                </button>
+                                <button class="exercise-btn" data-exercise="arm_raises" id="btnArmRaises">
+                                    <span class="exercise-icon">🙌</span>
+                                    <span class="exercise-name">Arm Raises</span>
+                                    <span class="exercise-desc">Hands up! Reach for the sky!</span>
+                                </button>
+                                <button class="exercise-btn" data-exercise="jumping_jacks" id="btnJumpingJacks">
+                                    <span class="exercise-icon">⭐</span>
+                                    <span class="exercise-name">Jumping Jacks</span>
+                                    <span class="exercise-desc">Jump and spread those arms wide!</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="body-status" id="bodyStatus" style="display:none;">

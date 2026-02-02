@@ -20,6 +20,9 @@ class PoseResult:
     left_knee_angle: float = 180.0
     right_knee_angle: float = 180.0
     avg_knee_angle: float = 180.0
+    left_shoulder_angle: float = 0.0
+    right_shoulder_angle: float = 0.0
+    avg_shoulder_angle: float = 0.0
     is_valid: bool = False
     confidence: float = 0.0
 
@@ -27,13 +30,21 @@ class PoseResult:
 class PoseDetector:
     """MediaPipe Pose detector for fitness tracking using Tasks API"""
 
-    # MediaPipe landmark indices (same as before)
+    # MediaPipe landmark indices
+    # Lower body
     LEFT_HIP = 23
     LEFT_KNEE = 25
     LEFT_ANKLE = 27
     RIGHT_HIP = 24
     RIGHT_KNEE = 26
     RIGHT_ANKLE = 28
+    # Upper body
+    LEFT_SHOULDER = 11
+    LEFT_ELBOW = 13
+    LEFT_WRIST = 15
+    RIGHT_SHOULDER = 12
+    RIGHT_ELBOW = 14
+    RIGHT_WRIST = 16
 
     def __init__(self, model_path: Optional[str] = None):
         # Download model if not provided
@@ -154,13 +165,48 @@ class PoseDetector:
         else:
             avg_knee_angle = right_knee_angle
 
-        avg_visibility = max(left_visibility, right_visibility)
+        # Calculate shoulder angles (for arm exercises)
+        left_shoulder_angle = 0.0
+        right_shoulder_angle = 0.0
+
+        # Check arm visibility
+        left_arm_landmarks = [self.LEFT_SHOULDER, self.LEFT_ELBOW, self.LEFT_HIP]
+        right_arm_landmarks = [self.RIGHT_SHOULDER, self.RIGHT_ELBOW, self.RIGHT_HIP]
+
+        left_arm_visibility = sum(landmarks[i].visibility for i in left_arm_landmarks) / 3
+        right_arm_visibility = sum(landmarks[i].visibility for i in right_arm_landmarks) / 3
+
+        if left_arm_visibility >= MIN_VISIBILITY:
+            left_hip = self.get_landmark_coords(landmarks, self.LEFT_HIP)
+            left_shoulder = self.get_landmark_coords(landmarks, self.LEFT_SHOULDER)
+            left_elbow = self.get_landmark_coords(landmarks, self.LEFT_ELBOW)
+            # Angle at shoulder (hip-shoulder-elbow)
+            left_shoulder_angle = self.calculate_angle(left_hip, left_shoulder, left_elbow)
+
+        if right_arm_visibility >= MIN_VISIBILITY:
+            right_hip = self.get_landmark_coords(landmarks, self.RIGHT_HIP)
+            right_shoulder = self.get_landmark_coords(landmarks, self.RIGHT_SHOULDER)
+            right_elbow = self.get_landmark_coords(landmarks, self.RIGHT_ELBOW)
+            right_shoulder_angle = self.calculate_angle(right_hip, right_shoulder, right_elbow)
+
+        # Average shoulder angle
+        if left_arm_visibility >= MIN_VISIBILITY and right_arm_visibility >= MIN_VISIBILITY:
+            avg_shoulder_angle = (left_shoulder_angle + right_shoulder_angle) / 2
+        elif left_arm_visibility >= MIN_VISIBILITY:
+            avg_shoulder_angle = left_shoulder_angle
+        else:
+            avg_shoulder_angle = right_shoulder_angle
+
+        avg_visibility = max(left_visibility, right_visibility, left_arm_visibility, right_arm_visibility)
 
         return PoseResult(
             landmarks=landmarks,
             left_knee_angle=left_knee_angle,
             right_knee_angle=right_knee_angle,
             avg_knee_angle=avg_knee_angle,
+            left_shoulder_angle=left_shoulder_angle,
+            right_shoulder_angle=right_shoulder_angle,
+            avg_shoulder_angle=avg_shoulder_angle,
             is_valid=True,
             confidence=avg_visibility
         )
