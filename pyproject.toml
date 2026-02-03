@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Francisco Cordoba", email = "francisco@example.com"}
+    {name = "Francisco Cordoba Otalora"},
+    {name = "SAM (Samantha AI)"}
 ]
 keywords = ["reachy-mini", "fitness", "ai", "pose-detection", "workout", "tts"]
 classifiers = [
@@ -35,6 +36,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/Franciscomoney/reachy-mini-fitness-trainer"
 Repository = "https://github.com/Franciscomoney/reachy-mini-fitness-trainer"
+
+[project.entry-points."reachy_mini_apps"]
+reachy-mini-fitness-trainer = "reachy_mini_fitness_trainer.main:ReachyMiniFitnessTrainer"
 
 [tool.setuptools.packages.find]
 where = ["."]

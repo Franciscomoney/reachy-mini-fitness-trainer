@@ -1,134 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reachy Mini Fitness Trainer</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Reachy Mini Fitness Trainer</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <div class="landing">
-        <header class="hero">
-            <div class="hero-badge">Reachy Mini App</div>
-            <h1 class="hero-title">Fitness Trainer</h1>
-            <p class="hero-tagline">AI-Powered Workout Companion with Voice Coaching</p>
-        </header>
+	<header class="hero">
+		<div class="topline">
+			<div class="brand">
+				<span class="logo">💪</span>
+				<span class="brand-name">Reachy Mini</span>
+			</div>
+			<div class="pill">Voice coaching · Pose detection · Robot buddy</div>
+		</div>
+		<div class="hero-grid">
+			<div class="hero-copy">
+				<p class="eyebrow">Fitness Trainer</p>
+				<h1>Your AI workout companion.</h1>
+				<p class="lede">
+					Get fit with Reachy Mini! Real-time pose detection counts your reps while your robot buddy cheers you on with voice coaching, head nods, and celebration dances.
+				</p>
+				<div class="hero-actions">
+					<a class="btn primary" href="#features">Explore features</a>
+					<a class="btn ghost" href="#how-it-works">See how it works</a>
+				</div>
+				<div class="hero-badges">
+					<span>Squats</span>
+					<span>Arm raises</span>
+					<span>Jumping jacks</span>
+					<span>Voice commands</span>
+				</div>
+			</div>
+			<div class="hero-visual">
+				<div class="glass-card">
+					<div class="video-wrapper">
+						<iframe
+							src="https://www.youtube.com/embed/9MBg8cj8YRE"
+							title="Reachy Mini Fitness Trainer Demo"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen>
+						</iframe>
+					</div>
+					<p class="caption">Watch Reachy Mini coach a real workout with voice encouragement and reactions.</p>
+				</div>
+			</div>
+		</div>
+	</header>
 
-        <main class="content">
-            <section class="demo-section">
-                <div class="demo-card">
-                    <div class="demo-visual">
-                        <div class="robot-preview">
-                            <svg viewBox="0 0 200 180" fill="none">
-                                <rect width="200" height="180" rx="20" fill="#3DDE99"/>
-                                <g class="antenna-left">
-                                    <line x1="60" y1="50" x2="40" y2="15" stroke="white" stroke-width="3"/>
-                                    <circle cx="40" cy="13" r="5" fill="white"/>
-                                </g>
-                                <g class="antenna-right">
-                                    <line x1="140" y1="50" x2="160" y2="15" stroke="white" stroke-width="3"/>
-                                    <circle cx="160" cy="13" r="5" fill="white"/>
-                                </g>
-                                <rect x="45" y="40" width="110" height="70" rx="18" fill="white"/>
-                                <ellipse cx="72" cy="75" rx="15" ry="17" fill="#3DDE99"/>
-                                <ellipse cx="128" cy="75" rx="15" ry="17" fill="#3DDE99"/>
-                                <ellipse cx="72" cy="75" rx="6" ry="8" fill="#1a1a1a"/>
-                                <ellipse cx="128" cy="75" rx="6" ry="8" fill="#1a1a1a"/>
-                                <path d="M65,120 Q55,140 60,165 Q100,175 140,165 Q145,140 135,120 Z" fill="white"/>
-                            </svg>
-                        </div>
-                        <div class="demo-stats">
-                            <div class="stat">
-                                <span class="stat-value">10</span>
-                                <span class="stat-label">Target Reps</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-value">🎙️</span>
-                                <span class="stat-label">Voice Coach</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-value">🤖</span>
-                                <span class="stat-label">Robot Buddy</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+	<section id="features" class="section features">
+		<div class="section-header">
+			<p class="eyebrow">What's inside</p>
+			<h2>AI-powered fitness coaching for your robot</h2>
+			<p class="intro">
+				MediaPipe pose detection meets expressive robot reactions for a workout experience that's actually fun.
+			</p>
+		</div>
+		<div class="feature-grid">
+			<div class="feature-card">
+				<span class="icon">📷</span>
+				<h3>Real-time pose detection</h3>
+				<p>MediaPipe tracks 33 body landmarks to detect your exercises automatically—no wearables needed.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🎙️</span>
+				<h3>Voice coaching</h3>
+				<p>Counts your reps out loud with encouragement, teasing when you slack, and celebration when you finish.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🤖</span>
+				<h3>Robot reactions</h3>
+				<p>Reachy nods on each rep, wiggles antennas when excited, and does a celebration dance when you hit your goal.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🗣️</span>
+				<h3>Voice commands</h3>
+				<p>Say "squats", "arm raises", or "jumping jacks" to pick your exercise—no touching required.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🎯</span>
+				<h3>Goal tracking</h3>
+				<p>Set your target reps and watch the progress bar fill up as you crush your workout.</p>
+			</div>
+		</div>
+	</section>
 
-            <section class="features-section">
-                <h2>Features</h2>
-                <div class="features-grid">
-                    <div class="feature">
-                        <span class="feature-icon">📷</span>
-                        <h3>Pose Detection</h3>
-                        <p>MediaPipe tracks your squats automatically - no sensors needed</p>
-                    </div>
-                    <div class="feature">
-                        <span class="feature-icon">🎙️</span>
-                        <h3>Voice Coaching</h3>
-                        <p>Counts your reps out loud with encouragement</p>
-                    </div>
-                    <div class="feature">
-                        <span class="feature-icon">🤖</span>
-                        <h3>Robot Gestures</h3>
-                        <p>Reachy nods, wiggles, and celebrates with you</p>
-                    </div>
-                    <div class="feature">
-                        <span class="feature-icon">🎯</span>
-                        <h3>Goal Tracking</h3>
-                        <p>Set targets and track progress in real-time</p>
-                    </div>
-                </div>
-            </section>
+	<section id="how-it-works" class="section story">
+		<div class="story-grid">
+			<div class="story-card">
+				<p class="eyebrow">How it works</p>
+				<h3>Camera sees you, robot coaches you</h3>
+				<ul class="story-list">
+					<li><span>📷</span> Your webcam captures your movement in real-time.</li>
+					<li><span>🦵</span> MediaPipe analyzes knee/shoulder angles to detect exercise phases.</li>
+					<li><span>🔢</span> Each completed rep triggers voice feedback and robot reactions.</li>
+					<li><span>🎉</span> Hit your target and Reachy goes wild with celebration!</li>
+				</ul>
+			</div>
+			<div class="story-card secondary">
+				<p class="eyebrow">Supported exercises</p>
+				<h3>Three ways to get moving</h3>
+				<p class="story-text">
+					Start with squats for leg day, arm raises for upper body, or jumping jacks for cardio. Reachy adapts its coaching and reactions to each exercise type.
+				</p>
+				<div class="chips">
+					<span class="chip">Squats (knee angle)</span>
+					<span class="chip">Arm raises (shoulder angle)</span>
+					<span class="chip">Jumping jacks (full body)</span>
+				</div>
+			</div>
+		</div>
+	</section>
 
-            <section class="install-section">
-                <h2>Quick Start</h2>
-                <div class="install-steps">
-                    <div class="step">
-                        <span class="step-num">1</span>
-                        <code>pip install reachy-mini-fitness-trainer</code>
-                    </div>
-                    <div class="step">
-                        <span class="step-num">2</span>
-                        <code>reachy-mini-daemon --sim</code>
-                    </div>
-                    <div class="step">
-                        <span class="step-num">3</span>
-                        <span>Select "Fitness Trainer" from dashboard</span>
-                    </div>
-                </div>
-            </section>
+	<section class="section install">
+		<div class="section-header">
+			<p class="eyebrow">Get started</p>
+			<h2>Quick installation</h2>
+		</div>
+		<div class="install-steps">
+			<div class="step-card">
+				<span class="step-num">1</span>
+				<code>pip install reachy-mini-fitness-trainer</code>
+			</div>
+			<div class="step-card">
+				<span class="step-num">2</span>
+				<code>reachy-mini-daemon --sim</code>
+			</div>
+			<div class="step-card">
+				<span class="step-num">3</span>
+				<span>Select "Fitness Trainer" from the dashboard</span>
+			</div>
+		</div>
+	</section>
 
-            <section class="tts-section">
-                <h2>Voice Coaching Providers</h2>
-                <div class="tts-options">
-                    <div class="tts-option">
-                        <span class="tts-name">Inworld TTS</span>
-                        <span class="tts-badge default">Default</span>
-                        <p>Fast, expressive voices with <100ms latency</p>
-                    </div>
-                    <div class="tts-option">
-                        <span class="tts-name">OVH NVIDIA Riva</span>
-                        <span class="tts-badge">Alternative</span>
-                        <p>High-quality NVIDIA TTS via OVH AI Endpoints</p>
-                    </div>
-                </div>
-            </section>
-        </main>
+	<footer class="footer">
+		<p>
+			Created by <strong>Francisco Cordoba Otalora</strong> & <strong>SAM</strong>
+		</p>
+		<p>
+			Built for the <strong>Reachy Mini App Contest 2026</strong> by Pollen Robotics & Hugging Face.
+		</p>
+		<p class="footer-links">
+			<a href="https://github.com/Franciscomoney/reachy-mini-fitness-trainer" target="_blank" rel="noopener">GitHub</a>
+			·
+			<a href="https://www.pollen-robotics.com/reachy-mini/" target="_blank" rel="noopener">Reachy Mini</a>
+			·
+			<a href="https://inworld.ai/tts" target="_blank" rel="noopener">Inworld TTS</a>
+		</p>
+	</footer>
 
-        <footer class="footer">
-            <p>Built for the <strong>Reachy Mini App Contest 2025</strong></p>
-            <div class="footer-links">
-                <a href="https://github.com/Franciscomoney/reachy-mini-fitness-trainer">GitHub</a>
-                <span>•</span>
-                <a href="https://www.pollen-robotics.com/reachy-mini/">Reachy Mini</a>
-                <span>•</span>
-                <a href="https://inworld.ai/tts">Inworld TTS</a>
-            </div>
-        </footer>
-    </div>
 </body>
+
 </html>

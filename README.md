@@ -1,3 +1,19 @@
+---
+title: Reachy Mini Fitness Trainer
+emoji: "💪"
+colorFrom: green
+colorTo: blue
+sdk: static
+pinned: false
+tags:
+  - reachy_mini
+  - reachy_mini_python_app
+  - fitness
+  - ai
+  - pose-detection
+  - workout
+---
+
 # Reachy Mini Fitness Trainer
 
 > AI-powered workout companion with voice coaching for your Reachy Mini robot!
@@ -201,9 +217,13 @@ This creates a PR on the [official app store dataset](https://huggingface.co/dat
 - [ ] Workout history
 - [ ] Multiple exercise circuits
 
+## Authors
+
+Created by **Francisco Cordoba Otalora** & **SAM** (Samantha AI)
+
 ## Contest Entry
 
-Created for the **Reachy Mini App Contest 2025** by Pollen Robotics and Hugging Face.
+Built for the **Reachy Mini App Contest 2026** by Pollen Robotics and Hugging Face.
 
 ## License
 
